@@ -1,0 +1,15 @@
+name: NickColor
+main: me.b303.nickcolor.NickColor
+version: maven-version-number
+description: Colorizes nicknames
+author: blha303
+commands:
+    fixnick:
+        description: Fix nickname (put color back at start)
+permissions:
+    nickcolor.fixnick:
+        description: Allow user to use /fixnick
+        default: true
+    nickcolor.autosetnick:
+        description: Set color on name automatically
+        default: true
