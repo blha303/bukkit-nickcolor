@@ -38,7 +38,7 @@ public class NickColor extends JavaPlugin implements Listener {
 				sender.sendMessage("Usage: /fixnick [name]");
 				return true;
 			}
-			p.setDisplayName(ChatColor.getByChar(getColor(p.getUniqueId().toString())) + p.getName());
+			p.setDisplayName(ChatColor.getByChar(getColor(p.getUniqueId().toString())) + p.getName() + ChatColor.RESET);
 			sender.sendMessage(String.format("Name fixed (%s%s)", p.getDisplayName(), ChatColor.RESET));
 			return true;
 		}
@@ -52,7 +52,7 @@ public class NickColor extends JavaPlugin implements Listener {
 			event.getPlayer().setDisplayName(this.getConfig().getString("players." + event.getPlayer().getName()));
 		}
 		this.getLogger().info(getColor(event.getPlayer().getUniqueId().toString()));
-		event.getPlayer().setDisplayName(ChatColor.getByChar(getColor(event.getPlayer().getUniqueId().toString())) + event.getPlayer().getName());
+		event.getPlayer().setDisplayName(ChatColor.getByChar(getColor(event.getPlayer().getUniqueId().toString())) + event.getPlayer().getName() + ChatColor.RESET);
 	}
 	
 	@EventHandler
@@ -69,6 +69,7 @@ public class NickColor extends JavaPlugin implements Listener {
 
 	public static int toAscii(String s, int modulus){
 		StringBuilder sb = new StringBuilder();
+		s = s.substring(0, 8);
 		String ascString;
 		long asciiInt;
 		for (int i = 0; i < s.length(); i++){

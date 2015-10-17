@@ -89,30 +89,6 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9</version>
-                <!--<configuration> <stylesheetfile>${project.basedir}/style/stylesheet.css</stylesheetfile>
-                  </configuration> -->
-                <executions>
-                    <execution>
-                        <id>non-aggregate</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <links>
-                                <link>https://hub.spigotmc.org/javadocs/spigot/</link>
-                            </links>
-                            <linksource>true</linksource>
-                            <!-- Links own source files -->
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
         </plugins>
     </build>
 </project>
