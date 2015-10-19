@@ -5,7 +5,7 @@ description: Colorizes nicknames
 author: blha303
 commands:
     fixnick:
-        description: Fix nickname (put color back at start)
+        description: Allows user to fix their nickname color or set a new one
 permissions:
     nickcolor.fixnick:
         description: Allow user to use /fixnick

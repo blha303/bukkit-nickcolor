@@ -1,5 +1,7 @@
 package me.b303.nickcolor;
 
+import java.util.Arrays;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -29,16 +31,45 @@ public class NickColor extends JavaPlugin implements Listener {
 	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
 		if (commandLabel.equals("fixnick") && sender.hasPermission("nickcolor.fixnick")) {
-			Player p;
+			Player p = null;
+			ChatColor c;
 			if (sender instanceof Player) {
 				p = (Player)sender;
-			} else if (args.length == 1) {
+				if (p == null) {
+					sender.sendMessage("Player not found.");
+					return true;
+				}
+				if (args.length == 1) {
+					if (Arrays.asList(colors).contains(args[0])) {
+						c = ChatColor.getByChar(args[0]);
+					} else {
+						sender.sendMessage("Invalid color. Must be one of 1,2,3,4,5,6,7,8,9,a,b,c,d,e");
+						return true;
+					}
+				} else {
+					c = ChatColor.getByChar(getColor(p.getUniqueId().toString()));
+				}
+			} else if (args.length >= 1) {
 				p = this.getServer().getPlayer(args[0]);
+				if (p == null) {
+					sender.sendMessage("Player not found.");
+					return false;
+				}
+				if (args.length == 2) {
+					if (Arrays.asList(colors).contains(args[1])) {
+						c = ChatColor.getByChar(args[1]);
+					} else {
+						sender.sendMessage("Invalid color. Must be one of 1,2,3,4,5,6,7,8,9,a,b,c,d,e");
+						return true;
+					}
+				} else {
+					c = ChatColor.getByChar(getColor(p.getUniqueId().toString()));
+				}
 			} else {
-				sender.sendMessage("Usage: /fixnick [name]");
+				sender.sendMessage("Usage: /fixnick [name] [colorcode]");
 				return true;
 			}
-			p.setDisplayName(ChatColor.getByChar(getColor(p.getUniqueId().toString())) + p.getName() + ChatColor.RESET);
+			p.setDisplayName(c + p.getName() + ChatColor.RESET);
 			sender.sendMessage(String.format("Name fixed (%s%s)", p.getDisplayName(), ChatColor.RESET));
 			return true;
 		}
