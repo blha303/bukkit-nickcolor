@@ -27,10 +27,14 @@ public class NickColor extends JavaPlugin implements Listener {
 	public void onDisable() {
 		return;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
-		if (commandLabel.equals("fixnick") && sender.hasPermission("nickcolor.fixnick")) {
+		if (args.length >= 1 && args[0].equals("version")) {
+			sender.sendMessage(String.format("%s %s", this.getDescription().getName(), this.getDescription().getVersion()));
+			return true;
+		}
+		if (sender.hasPermission("nickcolor.fixnick")) {
 			Player p = null;
 			ChatColor c;
 			if (sender instanceof Player) {
@@ -43,7 +47,7 @@ public class NickColor extends JavaPlugin implements Listener {
 					if (Arrays.asList(colors).contains(args[0])) {
 						c = ChatColor.getByChar(args[0]);
 					} else {
-						sender.sendMessage("Invalid color. Must be one of 1,2,3,4,5,6,7,8,9,a,b,c,d,e");
+						sender.sendMessage("Invalid color. Must be one of " + implode(",", colors));
 						return true;
 					}
 				} else {
@@ -59,14 +63,14 @@ public class NickColor extends JavaPlugin implements Listener {
 					if (Arrays.asList(colors).contains(args[1])) {
 						c = ChatColor.getByChar(args[1]);
 					} else {
-						sender.sendMessage("Invalid color. Must be one of 1,2,3,4,5,6,7,8,9,a,b,c,d,e");
+						sender.sendMessage("Invalid color. Must be one of " + implode(",", colors));
 						return true;
 					}
 				} else {
 					c = ChatColor.getByChar(getColor(p.getUniqueId().toString()));
 				}
 			} else {
-				sender.sendMessage("Usage: /fixnick [name] [colorcode]");
+				sender.sendMessage("Usage: /" + commandLabel + " [name] [colorcode]");
 				return true;
 			}
 			p.setDisplayName(c + p.getName() + ChatColor.RESET);
@@ -75,17 +79,17 @@ public class NickColor extends JavaPlugin implements Listener {
 		}
 		return false;
 	}
-	
+
 	@EventHandler
 	public void playerJoinEvent(PlayerJoinEvent event) {
 		if (!event.getPlayer().hasPermission("nickcolor.autosetnick")) return;
-		if (this.getConfig().contains("players." + event.getPlayer().getName())) {
-			event.getPlayer().setDisplayName(this.getConfig().getString("players." + event.getPlayer().getName()));
+		if (this.getConfig().contains("players." + event.getPlayer().getUniqueId().toString())) {
+			event.getPlayer().setDisplayName(this.getConfig().getString("players." + event.getPlayer().getUniqueId().toString()));
+		} else {
+			event.getPlayer().setDisplayName(ChatColor.getByChar(getColor(event.getPlayer().getUniqueId().toString())) + event.getPlayer().getName() + ChatColor.RESET);
 		}
-		this.getLogger().info(getColor(event.getPlayer().getUniqueId().toString()));
-		event.getPlayer().setDisplayName(ChatColor.getByChar(getColor(event.getPlayer().getUniqueId().toString())) + event.getPlayer().getName() + ChatColor.RESET);
 	}
-	
+
 	@EventHandler
 	public void playerQuitEvent(PlayerQuitEvent event) {
 		this.getConfig().set("players." + event.getPlayer().getUniqueId().toString(), event.getPlayer().getDisplayName());
@@ -93,7 +97,7 @@ public class NickColor extends JavaPlugin implements Listener {
 	}
 
 	// Utils
-	
+
 	public String getColor(String name) {
 		return colors[toAscii(name, colors.length - 1)];
 	}
@@ -109,6 +113,18 @@ public class NickColor extends JavaPlugin implements Listener {
 		ascString = sb.toString();
 		asciiInt = Long.parseLong(ascString);
 		return (int) (asciiInt % modulus);
+	}
+
+	public static String implode(String separator, String... data) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < data.length - 1; i++) {
+			if (!data[i].matches(" *")) {
+				sb.append(data[i]);
+				sb.append(separator);
+			}
+		}
+		sb.append(data[data.length - 1].trim());
+		return sb.toString();
 	}
 
 }

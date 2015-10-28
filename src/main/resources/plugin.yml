@@ -6,6 +6,7 @@ author: blha303
 commands:
     fixnick:
         description: Allows user to fix their nickname color or set a new one
+        aliases: nickcolor
 permissions:
     nickcolor.fixnick:
         description: Allow user to use /fixnick
